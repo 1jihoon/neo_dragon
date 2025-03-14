@@ -1,0 +1,9 @@
+build/
+bin/
+*.o
+*.exe
+*.dll
+*.so
+.vs/
+*.vsidx
+

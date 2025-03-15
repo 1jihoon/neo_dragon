@@ -24,6 +24,7 @@ public:
 
     void Sparkstop();
     void SuperStop();
+    void Wingstop();
 };
 
 #endif

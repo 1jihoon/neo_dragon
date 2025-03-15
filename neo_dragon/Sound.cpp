@@ -62,3 +62,7 @@ void Sound::Sparkstop() {
 void Sound::SuperStop() {
     superSound->stop();
 }
+
+void Sound::Wingstop() {
+    wingSound->stop();
+}

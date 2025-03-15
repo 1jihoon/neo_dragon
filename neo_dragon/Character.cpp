@@ -246,19 +246,22 @@ void Character::handleInput() {
         if ((rightshieldcnt == 1 && leftshieldcnt == 0) || midleshieldcnt == 1) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
                 currentState = DragonState::Rightshiled;
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-                    currentState = DragonState::Spark;
-                }
+                sound.Sparkstop();
+                sound.Wingstop();
+                fireActive = false;
+                fireReady = false;
             }
         }
 
         if (leftshieldcnt == 1 && rightshieldcnt == 0) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
                 currentState = DragonState::Leftshiled;
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
-                    currentState = DragonState::Spark;
-                }
+                sound.Sparkstop();
+                sound.Wingstop();
+                fireActive = false;
+                fireReady = false;
             }
+            
         }
         //shiled부분은 아예 따로 빼놓아야 한다 예를 들어 Right 조건안에다
         //그대로 써버릴 경우 Right버튼을 누르고 있는 상태에서 s를 눌러야지 방어 모션이 취해지기에

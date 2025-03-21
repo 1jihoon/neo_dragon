@@ -45,6 +45,21 @@ private:
 	float superSpeed = 1.0f;
 	float superDuration = 0.2f;
 
+
+	//오른쪽 에너지파 애니메이션 변수
+	int RightkamehamehaFrame = 0;
+	std::vector<sf::Texture> RightkamehamehaFrames;
+	sf::Clock RightkamehameClock;
+	float RightkamehameSpeed = 1.0f;
+	float RightkamehameDuration = 0.08f;
+
+	//왼쪽 에너지파 애니메이션 변수
+	int LeftkamehamehaFrame = 0;
+	std::vector<sf::Texture> LeftkamehamehaFrames;
+	sf::Clock LeftkamehamehaClock;
+	float LeftkamehameSpeed = 1.0f;
+	float LeftkamehameDuration = 0.06f;
+
 public:
 	Animation();
 	virtual ~Animation();
@@ -68,5 +83,11 @@ public:
 
 	void superSaiyanFrames();
 	void superSaiyanAnimation();
+
+	void RightKamehameFrames();
+	void RightKamehameAnimation();
+
+	void LeftKamehameFrames();
+	void LeftKamehameAnimation();
 };
 #endif // ANIMATION_H

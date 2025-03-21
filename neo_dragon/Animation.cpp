@@ -10,11 +10,38 @@ Animation::Animation() {
     loadRightWalkFrames();
     loadLeftWalkFrames();
     superSaiyanFrames();
+    RightKamehameFrames();
+    LeftKamehameFrames();
 }
-//한 번에 싹 다 초기화
+//한 번에 싹 다 초기화 즉 안전한 초기 상태에서 시작 가능
 
 Animation::~Animation() {
+    // 꼭 필요하지는 않지만, 명시적으로 벡터 clear 가능
+    // 벡터 안을 비울 때 이 clear()를 쓴다.
+    /*rightwingFrames.clear();
+    leftwingFrames.clear();
+    sparkFrames.clear();
+    rightWalkFrames.clear();
+    leftWalkFrames.clear();
+    supersaiyanFrames.clear();
+    RightkamehamehaFrames.clear();
+    LeftkamehamehaFrames.clear();*/
 
+    //벡터 안을 비울 때 clear()를 쓰지만 메모리는 그대로 남기에 
+    //메모리를 완전히 0으로 만드려면 이 swap을 써서 메모리를 회수한다.
+    std::vector<sf::Texture>().swap(rightwingFrames);
+    std::vector<sf::Texture>().swap(leftwingFrames);
+    std::vector<sf::Texture>().swap(sparkFrames);
+    std::vector<sf::Texture>().swap(rightWalkFrames);
+    std::vector<sf::Texture>().swap(leftWalkFrames);
+    std::vector<sf::Texture>().swap(supersaiyanFrames);
+    std::vector<sf::Texture>().swap(RightkamehamehaFrames);
+    std::vector<sf::Texture>().swap(LeftkamehamehaFrames);
+
+    delete targetSprite;
+    //포인터로 Sprite를 선언했으니 메모리가 관련됐으니 해제해준다.
+    //new sf나 targetSprite->setTexture(...)로 내가 만들었으면 delete를 써도 되지만
+    //아니라면 쓰면 안된다.
 }
 
 void Animation::setTargetSprite(sf::Sprite* sprite) {
@@ -29,9 +56,6 @@ void Animation::RightloadWingFrames() {
         if (frame.loadFromFile(filename)) {
             rightwingFrames.push_back(frame);
         }
-        else {
-            std::cerr << "Error: 파일 로드 실패 - " << filename << std::endl;
-        }
     }
 }
 
@@ -41,9 +65,6 @@ void Animation::LeftloadWingFrames() {
         std::string filename = "leftwings_" + std::to_string(i) + ".bmp";
         if (frame.loadFromFile(filename)) {
             leftwingFrames.push_back(frame);
-        }
-        else {
-            std::cerr << "Error: 파일 로드 실패 - " << filename << std::endl;
         }
     }
 
@@ -55,9 +76,6 @@ void Animation::loadSparkFrames() {
         if (frame.loadFromFile(filename)) {
             sparkFrames.push_back(frame);
         }
-        else {
-            std::cerr << "Error: 파일 로드 실패 - " << filename << std::endl;
-        }
     }
 }
 void Animation::loadRightWalkFrames() {
@@ -67,9 +85,6 @@ void Animation::loadRightWalkFrames() {
         if (frame.loadFromFile(filename)) {
             rightWalkFrames.push_back(frame);
         }
-        else {
-            std::cerr << "Error: 파일 로드 실패 - " << filename << std::endl;
-        }
     }
 }
 void Animation::loadLeftWalkFrames() {
@@ -78,9 +93,6 @@ void Animation::loadLeftWalkFrames() {
         std::string filename = "leftwalking_" + std::to_string(i) + ".bmp";
         if (frame.loadFromFile(filename)) {
             leftWalkFrames.push_back(frame);
-        }
-        else {
-            std::cerr << "Error: 파일 로드 실패 - " << filename << std::endl;
         }
     }
 }
@@ -94,6 +106,27 @@ void Animation::superSaiyanFrames() {
         }
     }
 }
+
+void Animation::RightKamehameFrames() {
+    for (int i = 1; i <= 2; i++) {
+        sf::Texture frame;
+        std::string filename = "neo_prime_photone_Rightenergypa_" + std::to_string(i) + ".bmp";
+        if (frame.loadFromFile(filename)){
+            RightkamehamehaFrames.push_back(frame);
+        }
+    }
+}
+
+void Animation::LeftKamehameFrames() {
+    for (int i = 1; i <= 2; i++) {
+        sf::Texture frame;
+        std::string filename = "neo_prime_photone_Leftenergypa_" + std::to_string(i) + ".bmp";
+        if (frame.loadFromFile(filename)) {
+            LeftkamehamehaFrames.push_back(frame);
+        }
+    }
+}
+
 
 // 애니메이션 업데이트 함수들
 void Animation::RightWingAnimation() {
@@ -142,3 +175,18 @@ void Animation::superSaiyanAnimation() {
     }
 }
 
+void Animation::RightKamehameAnimation() {
+    if (RightkamehameClock.getElapsedTime().asSeconds() > RightkamehameDuration / RightkamehameSpeed) {
+        RightkamehamehaFrame = (RightkamehamehaFrame + 1) % RightkamehamehaFrames.size();
+        targetSprite->setTexture(RightkamehamehaFrames[RightkamehamehaFrame]);
+        RightkamehameClock.restart();
+    }
+}
+
+void Animation::LeftKamehameAnimation() {
+    if (LeftkamehamehaClock.getElapsedTime().asSeconds() > LeftkamehameDuration / LeftkamehameSpeed) {
+        LeftkamehamehaFrame = (LeftkamehamehaFrame + 1) % LeftkamehamehaFrames.size();
+        targetSprite->setTexture(LeftkamehamehaFrames[LeftkamehamehaFrame]);
+        LeftkamehamehaClock.restart();
+    }
+}

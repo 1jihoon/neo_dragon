@@ -14,6 +14,7 @@ int Sound::loadSounds() {
     wingSound = std::make_unique<sf::Sound>(wingSoundBuffer);
     sparkSound = std::make_unique<sf::Sound>(sparkSoundBuffer);
     superSound = std::make_unique<sf::Sound>(superSoundBuffer);
+    //이런 식으로 소유권을 넘긴다.
 }
 
 void Sound::WingSounds(){

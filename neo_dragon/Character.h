@@ -18,7 +18,9 @@ enum class DragonState {
     leftflying,//왼쪽으로 날다가 아무것도 누르지 않았을 때의 상태
     Body,//변신했을때의 상태
     Rightshiled,
-    Leftshiled
+    Leftshiled,
+    Rightkamehameha,
+    LeftKamehameha
 };
 
 class Character{
@@ -30,6 +32,8 @@ private:
     DragonState currentState = DragonState::Idle;
     Animation animation;
     Sound sound;
+
+    float speed = 300.0f;
 
     // 기타 변수
 
@@ -48,20 +52,27 @@ private:
     sf::Clock clock_2;
     float fireTriggerTime = 5.0f;
 
-    //오른쪽,왼쪽 방어 변수
-    int rightshieldcnt = 0, leftshieldcnt = 0;
-    int midleshieldcnt = 0;
-    sf::Texture rightflyingTexture, bodyTexture, rightbodyTexture, sparkTexture, leftflyingTexture, RightshiledTexture, LeftshiledTexture;
+    //오른쪽,왼쪽 변수
+    int right = 0, left = 0;
+    int midle = 0;
+
     
+    
+    sf::Texture rightflyingTexture, bodyTexture, rightbodyTexture, leftflyingTexture, RightshiledTexture, LeftshiledTexture;
 
 public:
     Character();
     //dragon 이미지는 public으로 하지 않는다면 메인 함수에서 쓸 수 없기에 반드시 private로
     //쓰면 안된다.(지금 객체로 만들어서 쓰고 있기 때문이다.)
+
+    virtual ~Character();
+    //포인터 변수의 자료형에 상관없이 모든 소멸자를 호출하려면 virtual(가상 소멸자)을 쓴다.
     int loadTextures();
 
     void update();
     void handleInput();
+    void sky_handleInput();
+    void ground_handleInput();
     void linkAnimation();
     sf::Sprite& getSprite();  // 외부에서 그리기용
 };

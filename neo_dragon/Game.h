@@ -22,12 +22,21 @@ public:
 
 private:
 	sf::RenderWindow* window;
-	sf::Sprite *sprite;
+	//unique_ptr로 정의를 안 했기에 delete를 해야됨
+	std::unique_ptr<sf::Sprite> backgroundSprite;
+	std::unique_ptr<sf::Sprite> energytargetSprite;
+	//unique_ptr로 변수를 만들면 메모리 해제 안 해도 됨
+	sf::Texture TargetTexture;
 	sf::VideoMode videomode;
 	void initVariable();
 	void initwindow();
-	sf::Sprite *backgroundSprite;
 	sf::Texture backgroundTexture;
 	int initBackground();
+	int loadTargetTextures();
+	void isTarget();
 	Character c;
+	sf::Clock clock_3;
+	bool isTargetvisible = false;
+	bool isTargetTrue = false;
+	float TargetTriggerTime = 3.0f;
 };

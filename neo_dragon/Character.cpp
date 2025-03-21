@@ -2,13 +2,22 @@
 #include <iostream>
 
 
+
+
 sf::Sprite& Character::getSprite() {
     return *dragonSprite;
 }
 
 // 생성자에서 애니메이션, 텍스처, 사운드 로드
 Character::Character() {
-   
+    linkAnimation();
+    loadTextures();
+    update();
+}
+
+Character::~Character() {
+    //animation 클래스에서 변수를 빌려오는 것이므로 delete하면 animation 쪽의 변수가
+    //해제되기에 충돌난다. 따라서 delete를 쓰면 안된다.
 }
 
 void Character::linkAnimation() {
@@ -18,6 +27,8 @@ void Character::linkAnimation() {
     animation.loadRightWalkFrames();
     animation.loadLeftWalkFrames();
     animation.superSaiyanFrames();
+    animation.RightKamehameFrames();
+    animation.LeftKamehameFrames();
 }
 
 
@@ -33,6 +44,7 @@ int Character::loadTextures() {
     dragonSprite -> setPosition(sf::Vector2f(0, 500));
     dragonSprite -> setScale(sf::Vector2f(0.1f, 0.2f));
     animation.setTargetSprite(dragonSprite);
+
     return 0;
 }
 
@@ -72,21 +84,28 @@ void Character::update() {
     case DragonState::Leftshiled:
         dragonSprite -> setTexture(LeftshiledTexture);
         break;
+    case DragonState::Rightkamehameha:
+        animation.RightKamehameAnimation();
+        break;
+    case DragonState::LeftKamehameha:
+        animation.LeftKamehameAnimation();
+        break;
     }
 }
 
-void Character::handleInput() {
+void Character::sky_handleInput() {
     // deltaTime 계산
     float deltaTime = clock.restart().asSeconds();
-    float speed = 300.0f; // 이동 속도 (픽셀/초)
 
+    // 지면 충돌 처리
+    sf::FloatRect bounds = dragonSprite->getGlobalBounds();
     // 입력 처리
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
         sound.WingSounds();
-        dragonSprite -> move(sf::Vector2f(0, -speed * deltaTime));
+        dragonSprite->move(sf::Vector2f(0, -speed * deltaTime));
         currentState = DragonState::RightFlying;
         middlecnt = 1;
-        dragonSprite -> move(sf::Vector2f(0, -speed * deltaTime));
+        dragonSprite->move(sf::Vector2f(0, -speed * deltaTime));
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
             rightcnt = 1;
@@ -117,26 +136,23 @@ void Character::handleInput() {
     }
 
     if (!ismovingup) {
-        dragonSprite -> move(sf::Vector2f(0, gravity * deltaTime));
+        dragonSprite->move(sf::Vector2f(0, gravity * deltaTime));
     }
     // 방향키 입력 처리
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
-        dragonSprite -> move(sf::Vector2f(speed * deltaTime, 0));
+        dragonSprite->move(sf::Vector2f(speed * deltaTime, 0));
     }
 
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
-        dragonSprite -> move(sf::Vector2f(-speed * deltaTime, 0));
+        dragonSprite->move(sf::Vector2f(-speed * deltaTime, 0));
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
-        dragonSprite -> move(sf::Vector2f(0, speed * deltaTime));
+        dragonSprite->move(sf::Vector2f(0, speed * deltaTime));
     }
 
-
-    // 지면 충돌 처리
-    sf::FloatRect bounds = dragonSprite->getGlobalBounds();
 
     if (dragonSprite->getPosition().x < 0)
         dragonSprite->setPosition(sf::Vector2f(0, dragonSprite->getPosition().y));
@@ -158,11 +174,19 @@ void Character::handleInput() {
     //x의 끝은 800값의 초과이고 y의 끝은 600값의 초과이다
     //때문에 800을 초과하거나 600을 초과하는 값이 나올 때를 대비해서 그 때의 값들을 위치로 확실히 지정해놓고
     //그 위치값들을 지정한 후 기본값으로 설정하면 오른쪽키를 계속 누르고 있어도 모양은 변하지 않는다.
+}
+
+void Character::ground_handleInput() {
+    // deltaTime 계산
+    float deltaTime = clock.restart().asSeconds();
+
+    // 지면 충돌 처리
+    sf::FloatRect bounds = dragonSprite->getGlobalBounds();
 
     if (dragonSprite->getPosition().y + bounds.size.y > 600) {
-        dragonSprite->setPosition(sf::Vector2f(dragonSprite ->getPosition().x, 600 - bounds.size.y));
+        dragonSprite->setPosition(sf::Vector2f(dragonSprite->getPosition().x, 600 - bounds.size.y));
         currentState = DragonState::Idle;
-        midleshieldcnt = 1;
+        midle = 1;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
             currentState = DragonState::Spark;
             sound.SparkSounds();
@@ -214,15 +238,12 @@ void Character::handleInput() {
                 sound.WalkSounds();
             }
             currentState = DragonState::RightWalking;
-            rightshieldcnt = 1;
-            leftshieldcnt = 0;
+            right = 1;
+            left = 0;
+
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
                 currentState = DragonState::Spark;
-                sound.sparkSoundThink = true;
-            }
-
-            else {
-                sound.sparkSoundThink = false;
+                sound.Wingstop();
             }
         }
 
@@ -231,19 +252,16 @@ void Character::handleInput() {
                 sound.WalkSounds();
             }
             currentState = DragonState::LeftWalking;
-            leftshieldcnt = 1;
-            rightshieldcnt = 0;
+            left = 1;
+            right = 0;
+
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
                 currentState = DragonState::Spark;
-                sound.sparkSoundThink = true;
-            }
-
-            else {
-                sound.sparkSoundThink = false;
+                sound.Wingstop();
             }
         }
 
-        if ((rightshieldcnt == 1 && leftshieldcnt == 0) || midleshieldcnt == 1) {
+        if ((right == 1 && left == 0) || midle == 1) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
                 currentState = DragonState::Rightshiled;
                 sound.Sparkstop();
@@ -253,7 +271,7 @@ void Character::handleInput() {
             }
         }
 
-        if (leftshieldcnt == 1 && rightshieldcnt == 0) {
+        if (left == 1 && right == 0) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
                 currentState = DragonState::Leftshiled;
                 sound.Sparkstop();
@@ -261,7 +279,7 @@ void Character::handleInput() {
                 fireActive = false;
                 fireReady = false;
             }
-            
+
         }
         //shiled부분은 아예 따로 빼놓아야 한다 예를 들어 Right 조건안에다
         //그대로 써버릴 경우 Right버튼을 누르고 있는 상태에서 s를 눌러야지 방어 모션이 취해지기에
@@ -269,5 +287,22 @@ void Character::handleInput() {
         //middleshieldcnt는 내가 아무동작도 하지 않았을 때 기본적인 방어를 하게 하는 것으로
         //시작하자마자 방어 모션을 취하는 것이다.
         //s키를 누른 상태에서 A키를 누르면 자동적으로 A키의 모션이 발동되면서 스파크가 일어나지만 이건 좀 고민해보자
+
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && (right == 1)) {
+            currentState = DragonState::Rightkamehameha;
+            sound.Wingstop();
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) && (left == 1)) {
+            currentState = DragonState::LeftKamehameha;
+            sound.Wingstop();
+        }
+
     }
+}
+
+void Character::handleInput() {
+    sky_handleInput();
+    ground_handleInput();
 }

@@ -12,6 +12,7 @@ Game::Game() {
 }
 //loadTextures()에 있는 애니메이션 함수의 dragonSprite의 주소를 받아와서 여기서 
 //사용이 되야 하는데 만약 그 주소를 다른 곳에다 쓴다면 적어도 애니메이션은 못 쓴다고 봐야한다
+//한 번 넣어서 초기화해야 하는 배경및 윈도우등은 생성자에 넣어서 초기화한다.
 
 //praivate function
 void Game::initVariable() {
@@ -40,6 +41,9 @@ Game::~Game() {
 	delete this -> window;
 }
 
+//여기서부터 run()을 비롯한 함수들은 한 번만 초기화되는것이 아닌 계속 실행되야 하기에
+//생성자에 넣어서 초기화하면 안된다. 즉 무언가를 계속 발생시켜야 하는 코드라면
+//생성자에서 초기화시키면 안된다.
 void Game::run() {
 	while (window && window->isOpen()) {
 		pollEvents();

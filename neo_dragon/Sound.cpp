@@ -2,6 +2,13 @@
 
 Sound::Sound() {
     loadSounds();
+    WingSounds();
+    WalkSounds();
+    SparkSounds();
+    SuerSounds();
+    Sparkstop();
+    SuperStop();
+    Wingstop();
 }
 
 Sound::~Sound() {}

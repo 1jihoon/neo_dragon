@@ -40,9 +40,6 @@ private:
     float gravity = 200.0f; // 중력
     sf::Clock clock;        // deltaTime 계산용
 
-    int middlecnt = 0;
-    int rightcnt = 0;
-    int leftcnt = 0;
     bool ismovingup = false;
 
     int cnt = 0;
@@ -54,7 +51,7 @@ private:
 
     //오른쪽,왼쪽 변수
     int right = 0, left = 0;
-    int midle = 0;
+    int middle = 0;
 
     
     

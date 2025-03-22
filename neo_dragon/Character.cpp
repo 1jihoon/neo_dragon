@@ -2,8 +2,6 @@
 #include <iostream>
 
 
-
-
 sf::Sprite& Character::getSprite() {
     return *dragonSprite;
 }
@@ -12,7 +10,6 @@ sf::Sprite& Character::getSprite() {
 Character::Character() {
     linkAnimation();
     loadTextures();
-    update();
 }
 
 Character::~Character() {
@@ -104,17 +101,17 @@ void Character::sky_handleInput() {
         sound.WingSounds();
         dragonSprite->move(sf::Vector2f(0, -speed * deltaTime));
         currentState = DragonState::RightFlying;
-        middlecnt = 1;
+        middle = 1;
         dragonSprite->move(sf::Vector2f(0, -speed * deltaTime));
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
-            rightcnt = 1;
-            leftcnt = 0;
+            right = 1;
+            left = 0;
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
-            leftcnt = 1;
-            rightcnt = 0;
+            left = 1;
+            right = 0;
             currentState = DragonState::LeftFlying;
         }
 
@@ -126,11 +123,11 @@ void Character::sky_handleInput() {
 
     else {
         ismovingup = false;
-        if ((rightcnt == 1 && leftcnt == 0) || middlecnt == 1) {
+        if ((right == 1 && left == 0) || middle == 1) {
             currentState = DragonState::rightflying;
         }
 
-        if (leftcnt == 1 && rightcnt == 0) {
+        if (left == 1 && right == 0) {
             currentState = DragonState::leftflying;
         }
     }
@@ -186,7 +183,7 @@ void Character::ground_handleInput() {
     if (dragonSprite->getPosition().y + bounds.size.y > 600) {
         dragonSprite->setPosition(sf::Vector2f(dragonSprite->getPosition().x, 600 - bounds.size.y));
         currentState = DragonState::Idle;
-        midle = 1;
+        middle = 1;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
             currentState = DragonState::Spark;
             sound.SparkSounds();
@@ -261,7 +258,7 @@ void Character::ground_handleInput() {
             }
         }
 
-        if ((right == 1 && left == 0) || midle == 1) {
+        if ((right == 1 && left == 0) || middle == 1) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
                 currentState = DragonState::Rightshiled;
                 sound.Sparkstop();

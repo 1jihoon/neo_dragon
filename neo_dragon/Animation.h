@@ -50,16 +50,20 @@ private:
 	int RightkamehamehaFrame = 0;
 	std::vector<sf::Texture> RightkamehamehaFrames;
 	sf::Clock RightkamehameClock;
-	float RightkamehameSpeed = 1.0f;
-	float RightkamehameDuration = 0.08f;
+	float RightkamehameSpeed = 0.8f;
+	float RightkamehameDuration = 0.01f;
 
 	//왼쪽 에너지파 애니메이션 변수
 	int LeftkamehamehaFrame = 0;
 	std::vector<sf::Texture> LeftkamehamehaFrames;
 	sf::Clock LeftkamehamehaClock;
-	float LeftkamehameSpeed = 1.0f;
-	float LeftkamehameDuration = 0.06f;
+	float LeftkamehameSpeed = 0.8f;
+	float LeftkamehameDuration = 0.01f;
 
+	sf::Clock animationEndDelayClock;
+	bool animationFinished = false;
+	bool readyToReset = false;
+   
 public:
 	Animation();
 	virtual ~Animation();
@@ -89,5 +93,11 @@ public:
 
 	void LeftKamehameFrames();
 	void LeftKamehameAnimation();
+
+	void resetRightKamehameha();
+	void resetLeftKamehameha();
+
+	bool isAnimationFinished() const;
+	void resetAnimationFinished();
 };
 #endif // ANIMATION_H

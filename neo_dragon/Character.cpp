@@ -2,8 +2,6 @@
 #include <iostream>
 
 
-
-
 sf::Sprite& Character::getSprite() {
     return *dragonSprite;
 }
@@ -12,7 +10,6 @@ sf::Sprite& Character::getSprite() {
 Character::Character() {
     linkAnimation();
     loadTextures();
-    update();
 }
 
 Character::~Character() {
@@ -50,6 +47,7 @@ int Character::loadTextures() {
 
 
 void Character::update() {
+
     switch (currentState) {
     case DragonState::RightFlying:
         animation.RightWingAnimation();
@@ -86,11 +84,26 @@ void Character::update() {
         break;
     case DragonState::Rightkamehameha:
         animation.RightKamehameAnimation();
+        if (animation.isAnimationFinished() && !readyToReturnIdle) {
+            readyToReturnIdle = true;
+            kameEndDelayClock.restart();  // 딜레이 시작
+        }
         break;
     case DragonState::LeftKamehameha:
         animation.LeftKamehameAnimation();
+        if (animation.isAnimationFinished() && !readyToReturnIdle) {
+            readyToReturnIdle = true;
+            kameEndDelayClock.restart();
+        }
         break;
     }
+
+    if (readyToReturnIdle && kameEndDelayClock.getElapsedTime().asSeconds() > 0.5f) {
+        setCurrentState(DragonState::Idle);
+        animation.resetAnimationFinished();
+        readyToReturnIdle = false;
+    }                                 
+
 }
 
 void Character::sky_handleInput() {
@@ -102,19 +115,21 @@ void Character::sky_handleInput() {
     // 입력 처리
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
         sound.WingSounds();
+        sound.SuperStop();
+        sound.Sparkstop();
         dragonSprite->move(sf::Vector2f(0, -speed * deltaTime));
         currentState = DragonState::RightFlying;
-        middlecnt = 1;
+        middle = 1;
         dragonSprite->move(sf::Vector2f(0, -speed * deltaTime));
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
-            rightcnt = 1;
-            leftcnt = 0;
+            right = 1;
+            left = 0;
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
-            leftcnt = 1;
-            rightcnt = 0;
+            left = 1;
+            right = 0;
             currentState = DragonState::LeftFlying;
         }
 
@@ -126,11 +141,11 @@ void Character::sky_handleInput() {
 
     else {
         ismovingup = false;
-        if ((rightcnt == 1 && leftcnt == 0) || middlecnt == 1) {
+        if ((right == 1 && left == 0) || middle == 1) {
             currentState = DragonState::rightflying;
         }
 
-        if (leftcnt == 1 && rightcnt == 0) {
+        if (left == 1 && right == 0) {
             currentState = DragonState::leftflying;
         }
     }
@@ -186,7 +201,7 @@ void Character::ground_handleInput() {
     if (dragonSprite->getPosition().y + bounds.size.y > 600) {
         dragonSprite->setPosition(sf::Vector2f(dragonSprite->getPosition().x, 600 - bounds.size.y));
         currentState = DragonState::Idle;
-        midle = 1;
+        middle = 1;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
             currentState = DragonState::Spark;
             sound.SparkSounds();
@@ -261,7 +276,7 @@ void Character::ground_handleInput() {
             }
         }
 
-        if ((right == 1 && left == 0) || midle == 1) {
+        if ((right == 1 && left == 0) || middle == 1) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
                 currentState = DragonState::Rightshiled;
                 sound.Sparkstop();
@@ -301,6 +316,39 @@ void Character::ground_handleInput() {
 
     }
 }
+
+sf::Vector2f Character::getEnergyBallPosition() {
+    sf::Vector2f pos = dragonSprite->getPosition();
+    sf::Vector2f scale = dragonSprite->getScale(); // 현재 스케일 (0.1, 0.2)
+
+    if (currentState == DragonState::Rightkamehameha)
+        return pos + sf::Vector2f(670.f * scale.x, 325.f * scale.y); // 오른쪽에서 날리므로 왼쪽 방향
+    else if (currentState == DragonState::LeftKamehameha)
+        return pos + sf::Vector2f(294.f * scale.x, 325.f * scale.y); // 왼쪽에서 날리므로 오른쪽 방향
+    else
+        return pos + sf::Vector2f(294.f * scale.x, 325.f * scale.y); // 기본 위치
+}
+
+DragonState Character::getCurrentState() {
+    return currentState;
+}
+
+void Character::setCurrentState(DragonState state) {
+    if (currentState != state) {
+        currentState = state;
+        readyToReturnIdle = false;
+        animation.resetAnimationFinished();
+
+        if (state == DragonState::Rightkamehameha) {
+            animation.resetRightKamehameha();  // ← 이거 빠졌다면 추가
+        }
+        else if (state == DragonState::LeftKamehameha) {
+            animation.resetLeftKamehameha();
+        }
+    }
+}
+
+
 
 void Character::handleInput() {
     sky_handleInput();

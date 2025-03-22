@@ -25,7 +25,16 @@ private:
 	//unique_ptr로 정의를 안 했기에 delete를 해야됨
 	std::unique_ptr<sf::Sprite> backgroundSprite;
 	std::unique_ptr<sf::Sprite> energytargetSprite;
+	std::unique_ptr<sf::Sprite> laserSprite;
 	//unique_ptr로 변수를 만들면 메모리 해제 안 해도 됨
+
+	sf::Vector2f direction;
+	sf::Vector2f laserOrigin;
+	float length;
+	float angle;
+	float baseWidth;
+	sf::VertexArray laser;
+
 	sf::Texture TargetTexture;
 	sf::VideoMode videomode;
 	void initVariable();
@@ -35,6 +44,7 @@ private:
 	int loadTargetTextures();
 	void isTarget();
 	Character c;
+	Animation a;
 	sf::Clock clock_3;
 	bool isTargetvisible = false;
 	bool isTargetTrue = false;

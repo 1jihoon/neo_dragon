@@ -108,6 +108,8 @@ void Animation::superSaiyanFrames() {
 }
 
 void Animation::RightKamehameFrames() {
+    RightkamehamehaFrames.clear();  // 중복 방지
+
     for (int i = 1; i <= 2; i++) {
         sf::Texture frame;
         std::string filename = "neo_prime_photone_Rightenergypa_" + std::to_string(i) + ".bmp";
@@ -118,12 +120,32 @@ void Animation::RightKamehameFrames() {
 }
 
 void Animation::LeftKamehameFrames() {
+    LeftkamehamehaFrames.clear();  // 중복 방지
+
     for (int i = 1; i <= 2; i++) {
         sf::Texture frame;
         std::string filename = "neo_prime_photone_Leftenergypa_" + std::to_string(i) + ".bmp";
         if (frame.loadFromFile(filename)) {
             LeftkamehamehaFrames.push_back(frame);
         }
+    }
+}
+
+void Animation::resetRightKamehameha() {
+    RightkamehamehaFrame = -1; // 프레임 초기화
+    animationFinished = false;
+    if (!RightkamehamehaFrames.empty()) {
+        targetSprite->setTexture(RightkamehamehaFrames[0]);
+        RightkamehameClock.restart(); // 애니메이션 타이밍도 초기화
+    }
+}
+
+void Animation::resetLeftKamehameha() {
+    LeftkamehamehaFrame = -1; // 프레임 초기화
+    animationFinished = false; // 이걸 명시적으로 false
+    if (!LeftkamehamehaFrames.empty()) {
+        targetSprite->setTexture(LeftkamehamehaFrames[0]);
+        LeftkamehamehaClock.restart();
     }
 }
 
@@ -180,6 +202,14 @@ void Animation::RightKamehameAnimation() {
         RightkamehamehaFrame = (RightkamehamehaFrame + 1) % RightkamehamehaFrames.size();
         targetSprite->setTexture(RightkamehamehaFrames[RightkamehamehaFrame]);
         RightkamehameClock.restart();
+        //std::cout << "[RightKamehameha] 프레임: " << RightkamehamehaFrame << std::endl;
+        //std::cout << "현재 프레임: " << RightkamehamehaFrame << std::endl;
+    }
+
+    if (!animationFinished && RightkamehamehaFrame == RightkamehamehaFrames.size() - 1) {
+        animationFinished = true;
+        animationEndDelayClock.restart(); // 한 번만 초기화
+        //std::cout << "[RightKamehameha] 애니메이션 종료\n";
     }
 }
 
@@ -189,4 +219,19 @@ void Animation::LeftKamehameAnimation() {
         targetSprite->setTexture(LeftkamehamehaFrames[LeftkamehamehaFrame]);
         LeftkamehamehaClock.restart();
     }
+
+    if (!animationFinished && LeftkamehamehaFrame == LeftkamehamehaFrames.size() - 1) {
+        animationFinished = true;
+        animationEndDelayClock.restart(); // 한 번만 초기화
+        //std::cout << "[LeftKamehameha] 애니메이션 종료\n";
+    }
+}
+
+
+bool Animation::isAnimationFinished() const {
+    return animationFinished;
+}
+
+void Animation::resetAnimationFinished() {
+    animationFinished = false;
 }

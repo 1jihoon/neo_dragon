@@ -206,11 +206,10 @@ void Animation::RightKamehameAnimation() {
         //std::cout << "현재 프레임: " << RightkamehamehaFrame << std::endl;
     }
 
-    if (!animationFinished && RightkamehamehaFrame == RightkamehamehaFrames.size() - 1) {
+    /*if (!animationFinished && RightkamehamehaFrame == RightkamehamehaFrames.size() - 1) {
         animationFinished = true;
-        animationEndDelayClock.restart(); // 한 번만 초기화
         //std::cout << "[RightKamehameha] 애니메이션 종료\n";
-    }
+    }*/
 }
 
 void Animation::LeftKamehameAnimation() {
@@ -220,18 +219,17 @@ void Animation::LeftKamehameAnimation() {
         LeftkamehamehaClock.restart();
     }
 
-    if (!animationFinished && LeftkamehamehaFrame == LeftkamehamehaFrames.size() - 1) {
+    /*if (!animationFinished && LeftkamehamehaFrame == LeftkamehamehaFrames.size() - 1) {
         animationFinished = true;
-        animationEndDelayClock.restart(); // 한 번만 초기화
         //std::cout << "[LeftKamehameha] 애니메이션 종료\n";
-    }
+    }*/
 }
 
 
-bool Animation::isAnimationFinished() const {
+/*bool Animation::isAnimationFinished() const {
     return animationFinished;
 }
 
 void Animation::resetAnimationFinished() {
     animationFinished = false;
-}
+}*/

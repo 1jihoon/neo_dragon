@@ -84,25 +84,22 @@ void Character::update() {
         break;
     case DragonState::Rightkamehameha:
         animation.RightKamehameAnimation();
-        if (animation.isAnimationFinished() && !readyToReturnIdle) {
+        /*if (animation.isAnimationFinished() && !readyToReturnIdle) {
             readyToReturnIdle = true;
             kameEndDelayClock.restart();  // 딜레이 시작
-        }
+        }*/
         break;
     case DragonState::LeftKamehameha:
         animation.LeftKamehameAnimation();
-        if (animation.isAnimationFinished() && !readyToReturnIdle) {
-            readyToReturnIdle = true;
-            kameEndDelayClock.restart();
-        }
         break;
     }
 
-    if (readyToReturnIdle && kameEndDelayClock.getElapsedTime().asSeconds() > 0.5f) {
+    /*if (readyToReturnIdle && kameEndDelayClock.getElapsedTime().asSeconds() > 0.5f) {
         setCurrentState(DragonState::Idle);
         animation.resetAnimationFinished();
         readyToReturnIdle = false;
-    }                                 
+    }*/ 
+    //-> 이건 0.5초가 지나면 자연스레 보통의 상태로 돌아가게 하는 코드로 일단 현재는 필요없다
 
 }
 
@@ -337,7 +334,7 @@ void Character::setCurrentState(DragonState state) {
     if (currentState != state) {
         currentState = state;
         readyToReturnIdle = false;
-        animation.resetAnimationFinished();
+        //animation.resetAnimationFinished();
 
         if (state == DragonState::Rightkamehameha) {
             animation.resetRightKamehameha();  // ← 이거 빠졌다면 추가

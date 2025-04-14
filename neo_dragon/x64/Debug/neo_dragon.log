@@ -1,29 +1,9 @@
-﻿  Game.cpp
+﻿  Character.cpp
 C:\SFML-3.0.0-windows-vc17-64-bit\SFML-3.0.0\include\SFML\System\Exception.hpp(41,47): warning C4275: DLL 인터페이스가 아닌 class 'std::runtime_error'이(가) DLL 인터페이스 class 'sf::Exception'의 기본으로 사용되었습니다.
-  (소스 파일 'Game.cpp'을(를) 컴파일하는 중)
+  (소스 파일 'Character.cpp'을(를) 컴파일하는 중)
       C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\stdexcept(100,19):
       'std::runtime_error' 선언을 참조하십시오.
       C:\SFML-3.0.0-windows-vc17-64-bit\SFML-3.0.0\include\SFML\System\Exception.hpp(41,23):
       'sf::Exception' 선언을 참조하십시오.
   
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,102): warning C4244: '인수': 'T'에서 'T'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,102): warning C4244:         with
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,102): warning C4244:         [
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,102): warning C4244:             T=unsigned int
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,102): warning C4244:         ]
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,102): warning C4244:         and
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,102): warning C4244:         [
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,102): warning C4244:             T=float
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,102): warning C4244:         ]
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,71): warning C4244: '인수': 'T'에서 'T'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,71): warning C4244:         with
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,71): warning C4244:         [
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,71): warning C4244:             T=unsigned int
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,71): warning C4244:         ]
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,71): warning C4244:         and
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,71): warning C4244:         [
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,71): warning C4244:             T=float
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(37,71): warning C4244:         ]
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(31,1): warning C4715: 'Game::initBackground': 모든 제어 경로에서 값을 반환하지는 않습니다.
-C:\Users\tklfg\source\repos\neo_dragon\neo_dragon\Game.cpp(39,1): warning C4715: 'Game::loadTargetTextures': 모든 제어 경로에서 값을 반환하지는 않습니다.
   neo_dragon.vcxproj -> C:\Users\tklfg\source\repos\neo_dragon\x64\Debug\neo_dragon.exe
